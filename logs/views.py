@@ -1,20 +1,34 @@
-from celery.worker import request
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import ViewedContent, ViewedChannel, Log
 from .serialzier import ViewedContentSerializer, ViewedChannelSerializer, LogSerializer
 
 
-
 class ViewedContentViewSet(viewsets.ModelViewSet):
-    queryset = ViewedContent.objects.all()
     serializer_class = ViewedContentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        return ViewedContent.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class ViewedChannelViewSet(viewsets.ModelViewSet):
-    queryset = ViewedChannel.objects.all()
     serializer_class = ViewedChannelSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        return ViewedChannel.objects.filter(user=user)
 
-class LogViewSet(viewsets.ModelViewSet):
-    queryset = Log.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class LogViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LogSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Log.objects.filter(user=user)

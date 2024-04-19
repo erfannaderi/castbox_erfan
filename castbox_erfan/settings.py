@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'logs.middleware_to_see_episodes',
+    # 'castbox_erfan.admin_middleware',
 ]
 
 ROOT_URLCONF = 'castbox_erfan.urls'
